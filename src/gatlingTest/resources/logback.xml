@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%-5level] %logger{15} - %msg%n%rEx</pattern>
+		</encoder>
+		<immediateFlush>false</immediateFlush>
+
+		<filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+			<evaluator>
+				<expression>logger.equals("io.netty.util.internal.NativeLibraryLoader")</expression>
+			</evaluator>
+			<OnMismatch>NEUTRAL</OnMismatch>
+			<OnMatch>DENY</OnMatch>
+		</filter>
+	</appender>
+
+	<root level="WARN">
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</configuration>

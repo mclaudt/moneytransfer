@@ -1,0 +1,312 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "",
+    "description": "",
+    "termsOfService": "",
+    "version": "1.0"
+  },
+  "externalDocs": {
+    "description": "Source code",
+    "url": "https://github.com/mclaudt"
+  },
+  "servers": [
+    {
+      "url": "http://0.0.0.0:8090"
+    }
+  ],
+  "security": [],
+  "paths": {
+    "/accounts/echo": {
+      "post": {
+        "summary": "Echo service to test availability",
+        "description": "echoes the same account as requested",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Account"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "echoed account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Account"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts": {
+      "get": {
+        "summary": "Get account by name",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "requested account name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "first found account, if any",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Account"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create an account",
+        "description": "Creates an account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAccountDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns created account, with assigned id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Account"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{id}": {
+      "get": {
+        "summary": "Get account by id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true,
+            "description": "requested account id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "found account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Account"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update account",
+        "description": "Updates the account with provided fields",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAccountPatchDTO"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true,
+            "description": "updated account id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "updated account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Account"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete account by id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true,
+            "description": "id of an account to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "deleted successfully"
+          }
+        }
+      }
+    },
+    "/accounts/transfer": {
+      "post": {
+        "summary": "Transfer money from one account to another (not idempotent in general).",
+        "description": "Transfers from one account to another account. When idempotency key is presented, operation becomes idempotent.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "transfer result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Account": {
+        "required": [
+          "id",
+          "name",
+          "money"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "money": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "CreateAccountDTO": {
+        "required": [
+          "money",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "money": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "UpdateAccountPatchDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "money": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "TransferDTO": {
+        "required": [
+          "fromId",
+          "toId",
+          "money"
+        ],
+        "type": "object",
+        "properties": {
+          "fromId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "toId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "money": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idempotencyKey": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "TransferResult": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Account"
+          }
+        }
+      }
+    }
+  }
+}
