@@ -1,6 +1,6 @@
 # Intro
 
-moneytransfer is a simple but robust money transfer application, featuring safe transactions and idempotency for critical transfer operations.
+moneytransfer is a simple and robust money transfer service application, featuring safe transactions and idempotency for critical transfer operations.
 
 ```sbt run```
 
@@ -61,7 +61,7 @@ server{
 
 idempotency{
 
-  # Time-to-live for idempotency key, in seconds
+  # time-to-live for idempotency key, in seconds
   TTL = 3600
 
   # operations between old keys cleanup
