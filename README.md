@@ -35,17 +35,17 @@ For load test, run service:
 
 ```sbt run```
 
-and then run gatling in separate console.
+and then run gatling in separate console:
 
 ```sbt gatling:test```
 
-Generated reports are located in target/gatling/ folder
+Generated reports are located in ```target/gatling/``` folder.
 
-# Playing wih rest
+# Playing with REST
 
-Go to http://localhost:8090/swagger for REST interactive testing and documentation.
+Go to ```http://localhost:8090/swagger``` for REST interactive testing and documentation.
 
-http://localhost:8090/swagger-editor allows you to edit description interactievly, just import URL http://localhost:8090/api-docs/swagger-manual.json.
+```http://localhost:8090/swagger-editor``` allows you to edit description interactievly, just import URL ```http://localhost:8090/api-docs/swagger-manual.json```.
 
 # Config parameters
 ```
